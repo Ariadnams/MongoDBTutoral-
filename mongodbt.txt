@@ -1,0 +1,120 @@
+
+#Summary MongoDB 
+#Ariadna Elizabeth Moo Sosa 
+
+
+
+#Variable assignement
+>var potion = {
+    "name" : "Telepathic"
+     "vendor" : "Kettlecooked"
+    }
+
+
+
+#Acces the variable to see the contents 
+
+>potion
+ {
+      "name" : "Invisibility",
+       "vendor": "Kettlecooked"
+}
+
+
+
+
+
+#switches to use the database and creates it if does not exist when we write to it 
+>uses reviews 
+
+
+#returns the database 
+>db
+
+
+
+#Show list of commands 
+>help 
+
+
+#Show list of databases 
+>show dbs 
+
+
+
+#write to the database 
+>db.positions.insert(
+  {
+    "name" : "Telepathic ",
+    "vendor": "Kettlecooked"
+}
+)
+
+
+
+
+#find collection method to retrieve the potion from the #inventory collection
+
+>db.potions.find()
+     {
+
+     
+      "_id": ObjectId("559f07d741894edebdd8aa6d"),
+      "name": "Telepathic",
+      "vendor": "Kettlecooked"
+       }
+
+
+#finding a specific potion with a query 
+> db.potions.find({"name": "Telepathic"})
+{.
+"_id": ObjectId("559f07d741894edebdd8aa6d"),
+"name": "Telepathic",
+"vendor": "Kettlecooked"
+}
+
+
+
+
+#Queries that return multiple values 
+> db.potions.find(
+
+{
+"_id": ObjectId("55d232a5819aa726..."),
+"name": "Telepathic",
+"vendor": "Kettlecooked"
+}
+{
+"_id": ObjectId("55c3b9501aad0cb0..."),
+"name": "Shrinking",
+
+}
+)
+
+
+
+
+#use insert to add values 
+> db.potions.insert(
+
+{
+"name": "Telepathic",
+"vendor": "Kettlecooked",
+"price": 10.99,
+"score": 59
+"ingredients": ["newt toes", 42, "laughter"],
+"ratings": {"strength": 2, "flavor": 5}
+  }
+)
+
+
+
+#Finding array values 
+> db.potions.find({"ingredients": "laughter"})
+ {
+"_id": "ObjectId(...)",
+"name": "Telepathic",
+...
+"ingredients": ["newt toes","secret", "laughter"]
+}
+
