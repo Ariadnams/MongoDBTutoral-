@@ -216,8 +216,18 @@ type "it" for more
 
 #Embedding comments 
 
-{
-     
+  {
+        "name": "Telephatic",
+          ...
+        "comments": [
+           {
+             "title": "The best brevage",
+             "body":   "ingredients"
+            },
+            ...
+        ]
+ }
+    
 
 #Referencing users in comments
 
