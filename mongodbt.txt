@@ -209,9 +209,63 @@ type "it" for more
 
 
 
-#cursor method that returns the count of matching documents 
+#cursor method that returns the count of matching documents
+
 >db.beverages.find().count()
 80
+
+#Embedding comments 
+
+{
+     
+
+#Referencing users in comments
+
+
+
+
+#Introducing the aggregation framework 
+
+>db.brevages.aggregate(
+  [{"$group":  {"_id":   "$vendor_id" }} ]
+)
+
+#Embedding comments 
+
+{
+        "name": "Telephatic",
+          ...
+        "comments": [
+           {
+             "title": "The best brevage",
+             "body":   "ingredients"
+            },
+            ...
+        ]
+}
+
+#Referencing users in comments
+
+{
+        "name": "Telephatic",
+          ...
+        "comments": [
+           {
+             "title": "The best brevage",
+             "body":   "ingredients"
+             "user_id": "Shark"
+            },
+            ...
+          ]
+}
+
+#Introducing the aggregation framework 
+
+>db.brevages.aggregate(
+  [{"$group":  {"_id":   "$vendor_id" }} ]
+)
+
+
 
 
 #frecuently  asked questions in MongoDb
