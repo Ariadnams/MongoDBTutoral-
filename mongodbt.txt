@@ -20,9 +20,6 @@
 }
 
 
-
-
-
 #switches to use the database and creates it if does not exist when we write to it 
 >uses reviews 
 
@@ -216,23 +213,18 @@ type "it" for more
 
 #Embedding comments 
 
-  {
-        "name": "Telephatic",
+{
+     "name": "Telephatic",
           ...
-        "comments": [
-           {
-             "title": "The best brevage",
-             "body":   "ingredients"
-            },
-            ...
+      "comments": [
+         {
+      "title": "The best brevage",
+      "body":   "ingredients"
+          },
+      ...
         ]
- }
+}
     
-
-
-
-
-
 
 #Introducing the aggregation framework 
 
@@ -245,16 +237,16 @@ type "it" for more
 #Referencing users in comments
 
 {
-        "name": "Telephatic",
-          ...
-        "comments": [
-           {
-             "title": "The best brevage",
-             "body":   "ingredients"
-             "user_id": "Shark"
-            },
-            ...
-          ]
+    "name": "Telephatic",
+      ...
+     "comments": [
+         {
+     "title": "The best brevage",
+     "body":   "ingredients"
+     "user_id": "Shark"
+          },
+       ...
+    ]
 }
 
 #Introducing the aggregation framework 
@@ -262,7 +254,6 @@ type "it" for more
 >db.brevages.aggregate(
   [{"$group":  {"_id":   "$vendor_id" }} ]
 )
-
 
 
 
