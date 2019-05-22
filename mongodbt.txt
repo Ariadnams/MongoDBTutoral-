@@ -255,9 +255,68 @@ type "it" for more
   [{"$group":  {"_id":   "$vendor_id" }} ]
 )
 
+#using acumulators 
 
+>db.beverages.aggregates([
+  { "$group": {"_id": "$vendor_id", "total": {"$sum":1}}}
+}
+
+
+
+#Find paths 
+>db.beverages.aggregate([
+  {"$group":  {"_id":  "$vendor_id",  "total":  {"$sum" : 1 }}}
+ ])
+
+
+
+
+
+#Summming the grade per beverage in their gruop with grade
+>db.beverages.aggregate([
+{  "$group": {
+                          "_id": "$vendor_id";
+                           "total": {"$sum": 1 },
+                           "grade_total": { "$sum":  "$grade"}
+                        }
+   }
+])
+
+
+  
+#averaging beverage grade per vendor 
+
+>db.potions.aggregate([
+{  "$group": {
+         "_id": "$vendor_id",
+         "avg_grade":  { "$avg":  "$grade"}
+         }
+  }
+])
+
+#Returning the max grade per vendor 
+
+>db.potions.aggregate([ 
+ {  "$group": {
+        "_id":  "$vendor_id",
+        "max_grade":  {"$max":  "$grade"}
+        }
+  }
+])
+
+#using at the same time $max and $min 
+
+>db.beverages.aggregate([
+ {  "$group":{
+         "_id":  "$vendor_id",
+          "max_grade": {"$max" : "$grade"},
+          "min_grade" : {"$min" : "$grade"}
+        }
+     }
 
 #frecuently  asked questions in MongoDb
+
+
 
 Q.1What is MongoDB and Why we need MongoDB?
 
