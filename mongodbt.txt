@@ -12,7 +12,6 @@
 
 
 #Acces the variable to see the contents 
-
 >beverages
 {
       "name" : "Telephatic",
@@ -28,14 +27,12 @@
 >db
 
 
-
 #Show list of commands 
 >help 
 
 
 #Show list of databases 
 >show dbs 
-
 
 
 #write to the database 
@@ -47,45 +44,16 @@
 )
 
 
-
-
 #find collection method to retrieve the potion from the #inventory collection
-
 >db.beverage.find()
-{
-
-     "_id": ObjectId("559f07d741894edebdd8aa6d"),
-     "name": "Telepathic",
-     "status": "Active"
-
-}
 
 
 #finding a specific potion with a query 
 > db.beverages.find({"name": "Telepathic"})
-{
-  "_id": ObjectId("559f07d741894edebdd8aa6d"),
-  "name": "Telepathic",
-  "status": "Active"
-}
-
-
 
 
 #Queries that return multiple values .It means that more than a document matches the query 
 > db.beverage.find({"status":  "Active"})
-
-{
-"_id": ObjectId("55d232a5819aa726..."),
-"name": "Telepathic",
-"status": "Active"
-}
-{
-"_id": ObjectId("55c3b9501aad0cb0..."),
-"name": "Burn",
-"status": "Active"
-}
-
 
 
 #use insert to add values 
@@ -100,7 +68,6 @@
 "ratings": {"strength": 2, "flavor": 5}
   }
 )
-
 
 
 #Finding array values 
@@ -118,16 +85,13 @@
   )
 
 
-
 #Delete multiple Documents with {} with remove.
-
 >db.beverages.remove(
      {"status":Active}
   )
 
 
 #Update a document with $ operator 
-
 >db.beverages.update(
    {"name": "Love"},
    {"$set":  {"price ":5.66}}
@@ -163,19 +127,28 @@
 #find out which beverages have prices gretaer then 20 and less than 20 
 >db.beverages.find({"price": {"$gt":20 ,  "$lt":30}})
 
-#find() takes a second parameter called a “projection” and return back by setting their value to true with the fields that you want to select 
 
+#find out which beverages vendor is not eaul to Brewers 
+>db.beverages.find({"vendor": {"$ne": "Brewers"}}) 
+
+
+#find out a determined range with at least 1 value in array must be grether than 10 and less than 16
 >db.beverages.find(
-    {"grade": {"$gte":80}},
+ {"sizes" : {"$elemMatch": {"$gt": 10 , "$lt":16}}}
+ 
+ 
+#find() takes a second parameter called a “projection” and return back by setting their value to true with the fields that you want to select 
+>db.beverages.find(
+    {"grade": {"$gte": 90}},
     {"status": true, "name":true}
 )
 
-{
-    "_id": ObjectId(...),
-    "status":"Active",
-    "name":"Telepathic"
-}
-...
+#excluding two fields which are vendor and price of beverages 
+>db.beverages.find(
+     {"grade": {"$gte": 90}},
+     {"vendor": false, "price":false}
+)
+
 
 #excluiding the id field is the only field that can be set to false (this uselful for preparing data reports for non developers)
 
@@ -183,19 +156,14 @@
    {"grade": {"$gte": 80}},
    {"vendor": true, "price": true, "id":false}
 )
-{
-   "vendor": "Homebrewed",
-   "price": 9.99
-}
+
+
 
 #introducing the order
 #Whenever we search for documents, an object is returned from the find method called a “cursor object.” by default the first 20 documents are printed 
 
 >db.beverages.find("status": "Active"} )
-{"_id": ObjectId(...), ... }
-{"_id": ObjectId(...), ... }
-{"_id": ObjectId(...), ... }
-...
+
 
 #introducing through the order “it” will display the next 20 documents in the cursor.
 
@@ -205,14 +173,28 @@
 type "it" for more
 
 
-
 #cursor method that returns the count of matching documents
-
 >db.beverages.find().count()
-80
+
+
+#sorting  docuemnets in ascending order 
+>db.beverages.find().sort({"price":1})
+
+
+#sorting documents in descending order 
+
+>db.beverages.find().sort({"price":-1})
+
+
+#pagination of the first limit without skiping pagines.It will only the pagines 1,2,3 as page number 1 
+>db.beverages.find().limit(3)
+
+
+#pagination of the first limit by skipping pagines.It will  pagine the 3 to 6 pages as page number 2 
+>db.beverages.find().skip(3).limit(3) 
+
 
 #Embedding comments 
-
 {
      "name": "Telephatic",
           ...
@@ -233,7 +215,6 @@ type "it" for more
 )
 
 
-
 #Referencing users in comments
 
 {
@@ -249,27 +230,28 @@ type "it" for more
     ]
 }
 
-#Introducing the aggregation framework 
 
+#find out the number of beverages  per vendor by set the names and vendors as true 
+>db.beverages.find({},  {"name": true, "vendor": true})
+
+
+
+#Introducing the aggregation framework 
 >db.brevages.aggregate(
   [{"$group":  {"_id":   "$vendor_id" }} ]
 )
 
-#using acumulators 
 
+#Using acumulators 
 >db.beverages.aggregates([
   { "$group": {"_id": "$vendor_id", "total": {"$sum":1}}}
 }
-
 
 
 #Find paths 
 >db.beverages.aggregate([
   {"$group":  {"_id":  "$vendor_id",  "total":  {"$sum" : 1 }}}
  ])
-
-
-
 
 
 #Summming the grade per beverage in their gruop with grade
@@ -284,8 +266,7 @@ type "it" for more
 
 
   
-#averaging beverage grade per vendor 
-
+#Averaging beverage grade per vendor 
 >db.potions.aggregate([
 {  "$group": {
          "_id": "$vendor_id",
@@ -295,7 +276,6 @@ type "it" for more
 ])
 
 #Returning the max grade per vendor 
-
 >db.potions.aggregate([ 
  {  "$group": {
         "_id":  "$vendor_id",
@@ -305,7 +285,6 @@ type "it" for more
 ])
 
 #using at the same time $max and $min 
-
 >db.beverages.aggregate([
  {  "$group":{
          "_id":  "$vendor_id",
@@ -314,95 +293,78 @@ type "it" for more
         }
      }
 
-#frecuently  asked questions in MongoDb
 
+
+#Introducing the aggregation pipeline to pass data through many stages 
+db.beverages.aggregate([stage, stage , stage]) 
+
+
+
+
+#Frecuently  asked questions in MongoDb
 
 
 Q.1What is MongoDB and Why we need MongoDB?
-
 MongoDB is a document oriented database which means it stores the data in BSON format which is a binary representation of JSON and it contains more data types than JSON.
 
 
-
 Q2.What is difference between MongoDB and SQL or NoSQL between SQL?
-
 In SQL, data is stored in Table format whereas in MongoDB, it stores in JSON format.
-
 In MongoDB, development is simplified as its documents map naturally to modern, object-oriented programming languages. In SQL, we need object-relational mapping (ORM) layer that translates objects in code to relational tables.
 
 
-
 Q3. What is BSON in MongoDB?
-
 MongoDB stores data as BSON documents. BSON is a binary representation of JSON documents, though it contains more data types than JSON. Some of the supported data types are: Double, String, Object, Array, Binary Data, RegEx, Boolean, Date, Null, JavaScript, Timestamp. ObjectId.
-
-
 Some of the features of BSON:
-
 BSON is lightweight and is an important feature for any data representation format, especially when used over the network.
 BSON is designed to be traversed easily.
 It is efficient. Encoding data to BSON and decoding from BSON can be performed very quickly in most languages
 
 
-
 Q.4.What is writeConcern?
-
 Whenever we query the database to insert(), insertOne() or insertMany(), we can pass an additional parameter which is writeConcern. It is a document describes the level of acknowledgement requested from MongoDB for write operations. Write concern can include the following fields:
-
-
 the w option to request acknowledgement that the write operation has propagated to a specified number of mongod instances or to mongod instances with specified tags.
 the j option to request acknowledgement that the write operation has been written to the journal, and
 the wtimeout option to specify a time limit to prevent write operations from blocking indefinitely.
 
 
 Q5. What is sharding?
-
 Sharding means to store the data on the multiple machines.
 
 
 Q6. What is Aggregation in MongoDB?
-
 Aggregations are operations that process data records and return computed results.
 
 
 Q7. Define the namespace in mongodb?
-
 It is the concatenation of collection name and database.
 
 
 Q8.Explain Replication.
-
 Replication is the process of synchronizing data across multiple servers.
 
 
 Q9. Which method is used to create an index?
-
-
 CreateIndex() method is used to create an index.
 
 
 Q10.Which command is used to create the backup of database?
-
 Mongodump command is used to create the backup of database.
 
 
 Q11.Define Map reduce.
-
 Map-reduce is a generic multi-phase data aggregation modality which is used for processing quantities of data.
 
+
 Q12.How do I define or alter the collection schema?
-
 You do not need to specify a schema for a collection in MongoDB. Although it is common for the documents in a collection to have a largely homogeneous structure, it is not a requirement; i.e. documents in a single collection do not need to have the same set of fields. The data type for a field can differ across documents in a collection as well.
-
 To change the structure of the documents in a collection, update the documents to the new structure. For instance, add new fields, remove existing ones, or update the value of a field to a new type.
 
 Q13.How does MongoDB address SQL or Query injection?
-
 BSON
 As a client program assembles a query in MongoDB, it builds a BSON object, not a string. Thus traditional SQL injection attacks are not a problem. More details and some nuances are covered below.
 
 MongoDB represents queries as BSON objects. Typically client libraries provide a convenient, injection free, process to build these objects. Consider the following C++ example:
-
 
 
 >BSONObj my_query = BSON( "name" << a_name );
@@ -411,34 +373,11 @@ MongoDB represents queries as BSON objects. Typically client libraries provide a
 Here, my_query then will have a value such as { name : "Joe" }. If my_query contained special characters, for example ,, :, and {, the query simply wouldn’t match any documents. For example, users cannot hijack a query and convert it to a delete.
 
 Q14.What’s a Master or Primary?
-
 This is a node/member which is currently the primary and processes all writes for the replica set. During a failover event in a replica set, a different member can become primary.
 
 
 Q15.What’s a Secondary or Slave?
-
 A secondary is a node/member which applies operations from the current primary. This is done by tailing the replication oplog (local.oplog.rs). Replication from primary to secondary is asynchronous, however, the secondary will try to stay as close to current as possible (often this is just a few milliseconds on a LAN).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 References:
