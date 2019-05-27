@@ -387,5 +387,71 @@ https://intellipaat.com/interview-question/mongodb-interview-questions/
 https://docs.mongodb.com/manual/faq/fundamentals/#how-does-mongodb-address-sql-or-query-injection
 
 
+#Extra commands of MongoDB
+ 
+#The name of the collection to query for distinct values.
 
+
+{
+  distinct: "<collection>",
+  key: "<field>",
+  query: <query>,
+  readConcern: <read concern document>,
+  collation: <collation document>
+}
+
+
+#Specifies the collation to use for the operation.
+
+collation: {
+   locale: <string>,
+   caseLevel: <boolean>,
+   caseFirst: <string>,
+   strength: <int>,
+   numericOrdering: <boolean>,
+   alternate: <string>,
+   maxVariable: <string>,
+   backwards: <boolean>
+}
+
+
+#Performs aggregation operation using the aggregation pipeline.
+{
+  aggregate: "<collection>" || 1,
+  pipeline: [ <stage>, <...> ],
+  explain: <boolean>,
+  allowDiskUse: <boolean>,
+  cursor: <document>,
+  maxTimeMS: <int>,
+  bypassDocumentValidation: <boolean>,
+  readConcern: <document>,
+  collation: <document>,
+  hint: <string or document>,
+  comment: <string>,
+  writeConcern: <document>
+}
+
+
+#The mapReduce command allows you to run map-reduce aggregation operations over a collection.
+
+db.runCommand(
+               {
+  mapReduce: <collection>,
+  map: <function>,
+  reduce: <function>,
+  finalize: <function>,
+  out: <output>,
+  query: <document>,
+  sort: <document>,
+  limit: <number>,
+  scope: <document>,
+  jsMode: <boolean>,
+  verbose: <boolean>,
+  bypassDocumentValidation: <boolean>,
+  collation: <document>,
+  writeConcern: <document>
+               }
+
+
+https://docs.mongodb.com/manual/reference/command/mapReduce/
 
